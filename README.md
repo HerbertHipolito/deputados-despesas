@@ -1,6 +1,9 @@
 # deputados-despesas
 App criado com  React Native utilizando a API pública disponibilizada pela Câmera dos Deputados
 
+<div align="center">
+  <video src="https://user-images.githubusercontent.com/94997683/227032316-bc44a21e-56ad-4a55-afff-d20101db1548.mp4" width=400/>
+</div>
 
 # Funcionalidades implementadas
 
@@ -17,6 +20,3 @@ Acesso aos pagamentos feitos pela Câmara em prol do deputado selecionado. É po
 Acesso aos discursos do deputado selecionado feito em qualquer evento, nos sistemas da câmara. É possível filtrar por palavras ditas nos discursos e por datas.
 
 
-<div align="center">
-  <video src="https://user-images.githubusercontent.com/94997683/227032316-bc44a21e-56ad-4a55-afff-d20101db1548.mp4" width=400/>
-<div/>
