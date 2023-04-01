@@ -65,14 +65,14 @@ const styles = StyleSheet.create({
     alignItems:'center',
     backgroundColor:'#145DA0',
     textAlign:'center'
-},
-discursoTexto:{
-    textAlign:'center',
-},
-identificacaoTexto:{
-    fontSize:20
-},
-loading:{
-    height:'100%'
-}
+    },
+    discursoTexto:{
+        textAlign:'center',
+    },
+    identificacaoTexto:{
+        fontSize:20
+    },
+    loading:{
+        height:'100%'
+    }
 })

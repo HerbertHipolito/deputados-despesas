@@ -92,8 +92,8 @@ export default function Discursos({route,navigation}){
             }
 
             {loading?<View style={styles.loading}><ActivityIndicator size="large" /></View>:
+            discursos.length===0?<View style={styles.discursoNencontrado}><Text style={styles.discursoNencontradoText}>Nenhum discurso foi encontrado</Text></View>:
             <FlatList data={discursosFiltrados.length===0?discursos:discursosFiltrados}
-            
             renderItem = {
                 discurso => {
                     return <View style = {styles.cadaDiscurso}>
@@ -127,7 +127,8 @@ const styles = StyleSheet.create({
         textAlign:'center'
     },
     filtroButao:{
-        marginHorizontal:40
+        marginHorizontal:60,
+        marginVertical:10
     },
     discursoFiltro:{
         flexDirection:'column',
@@ -164,10 +165,12 @@ const styles = StyleSheet.create({
     },
     viewInicial:{
         alignItems:'center',
-        margin:5
+        margin:5,
+        marginTop:'15%'
     },
     deputadoNome:{
-        fontSize:20
+        fontSize:20,
+        marginBottom:'5%'
     },
     subtitulo:{
         fontSize:20,
@@ -179,5 +182,14 @@ const styles = StyleSheet.create({
     butaoPesquisar:{
         marginHorizontal:40,
         marginVertical:10
+    },
+    discursoNencontrado:{
+        alignItems:'center',
+        backgroundColor: '#2E8BC0',
+        height:'100%',
+        marginTop:'50%',
+    },
+    discursoNencontradoText:{
+        fontSize:20,
     }
 })

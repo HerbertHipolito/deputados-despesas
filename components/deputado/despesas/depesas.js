@@ -96,7 +96,8 @@ const styles = StyleSheet.create({
         margin:15
     },
     deputadoNome:{
-        fontSize:20
+        fontSize:20,
+        marginTop:'15%'
     },
     subtitulo:{
         fontSize:20,

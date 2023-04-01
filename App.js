@@ -20,8 +20,8 @@ export default function App() {
           <Stack.Screen name="Home" component = {Home}/>
           <Stack.Screen name="deputados" component = {Deputados}   options={{headerShown:false}} />
           <Stack.Screen name="deputado" component = {DeputadoSelecionado}/>
-          <Stack.Screen name="gastos" component = {gastosDeputados}/>
-          <Stack.Screen name="discursos" component = {discursosDeputados} options={{ title: 'Discursos' }} />
+          <Stack.Screen name="gastos" component = {gastosDeputados} options={{headerShown:false}}/>
+          <Stack.Screen name="discursos" component = {discursosDeputados} options={{headerShown:false}} />
           <Stack.Screen name="discursos por data" component = {DiscursosLimitado} options={{ title: 'Discursos Encontrados' }}  />
         </Stack.Group>
       </Stack.Navigator>

@@ -28,11 +28,14 @@ export default function Deputados({navigation}){
 
     return (
         <View style={styles.container}>
-        <Text style={styles.deputadosTitulo}>Nossos deputados</Text>
-        
-        <TextInput style={styles.textInput}
-        placeholder='Pesquisar deputado' 
-        onChangeText={filtroNome}/> 
+
+        {deputados.length!==0?<View style = {styles.inputDeputados}>
+          <Text style={styles.deputadosTitulo}>Nossos deputados</Text>
+          <TextInput style={styles.textInput}
+          placeholder='Pesquisar deputado' 
+          onChangeText={filtroNome}/> 
+        </View>:null}
+
 
         {qtdDeputadosFiltradosState!==0?<View style={styles.deputadosEncontrados} >
           <Text>{qtdDeputadosFiltradosState} deputados encontrados</Text>
@@ -75,6 +78,10 @@ const styles = StyleSheet.create({
       margin:0,
       paddingHorizontal:10
     },
+    inputDeputados:{
+      width:'100%',
+      alignItems: 'center',
+    },
     textInput:{
       marginBottom:10,
       borderWidth:1,
@@ -86,7 +93,6 @@ const styles = StyleSheet.create({
     },
     deputadosTitulo:{
       fontSize:35,
-      paddingTop:15,
       paddingBottom:10,
       marginTop:30
     },
