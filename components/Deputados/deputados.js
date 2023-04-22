@@ -36,7 +36,6 @@ export default function Deputados({navigation}){
           onChangeText={filtroNome}/> 
         </View>:null}
 
-
         {qtdDeputadosFiltradosState!==0?<View style={styles.deputadosEncontrados} >
           <Text>{qtdDeputadosFiltradosState} deputados encontrados</Text>
         </View>:null}

@@ -3,7 +3,6 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator} from '@react-navigation/stack';
 
 import Deputados from './components/Deputados/deputados'
-import Home from './components/home/home'
 import DeputadoSelecionado from './components/deputado/deputado'
 import gastosDeputados from './components/deputado/despesas/depesas'
 import discursosDeputados from './components/deputado/discursos/discursos'
@@ -17,7 +16,6 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator initialRouteName = "deputados">
         <Stack.Group screenOptions={{ headerStyle: styles.screen }} >
-          <Stack.Screen name="Home" component = {Home}/>
           <Stack.Screen name="deputados" component = {Deputados}   options={{headerShown:false}} />
           <Stack.Screen name="deputado" component = {DeputadoSelecionado}/>
           <Stack.Screen name="gastos" component = {gastosDeputados} options={{headerShown:false}}/>
@@ -28,18 +26,6 @@ export default function App() {
     </NavigationContainer>
   );
 }
-
-/*
-possiveis funcionalidades:
-
-Deputados
-proposições
-?frentes?
-partidos
-Orgãos
-Blocos
-*/
-
 
 const styles = StyleSheet.create({
   screen:{

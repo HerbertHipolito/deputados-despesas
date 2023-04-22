@@ -9,8 +9,6 @@ export default function DiscursosLimitado({route,navigation}){
 
     useEffect(() =>{
 
-        console.log(route.params)
-
         fetch('https://dadosabertos.camara.leg.br/api/v2/deputados/'+route.params.idDepu+'/discursos?dataInicio='+route.params.dataInicial+'&dataFim='+route.params.dataFim+'&itens=5')
         .then(res =>res.json())
         .then(res=>{
