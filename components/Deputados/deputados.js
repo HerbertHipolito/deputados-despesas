@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View,FlatList,Image,Button,TextInput, ActivityIndicator } from 'react-native'; 
+import {StyleSheet, Text, View,FlatList,Image,Button,TextInput, ActivityIndicator } from 'react-native';
 import {useState,useEffect} from 'react';
 
 export default function Deputados({navigation}){
@@ -23,7 +23,7 @@ export default function Deputados({navigation}){
       const deputadosFilt = deputados.filter( deputado => deputado.nome.includes(letras));
       setDeputadosFiltradosState(deputadosFilt);
       setQtdDeputadosFiltradosState(deputadosFilt.length);
-      
+
       }
 
     return (
@@ -32,8 +32,8 @@ export default function Deputados({navigation}){
         {deputados.length!==0?<View style = {styles.inputDeputados}>
           <Text style={styles.deputadosTitulo}>Nossos deputados</Text>
           <TextInput style={styles.textInput}
-          placeholder='Pesquisar deputado' 
-          onChangeText={filtroNome}/> 
+          placeholder='Pesquisar deputado'
+          onChangeText={filtroNome}/>
         </View>:null}
 
         {qtdDeputadosFiltradosState!==0?<View style={styles.deputadosEncontrados} >
@@ -44,10 +44,10 @@ export default function Deputados({navigation}){
         <View>
           <ActivityIndicator size="large" /><Text>Carregando dados dos deputados</Text>
         </View>:
-        <FlatList data={qtdDeputadosFiltradosState===0?deputados:deputadosFiltradosState} 
+        <FlatList data={qtdDeputadosFiltradosState===0?deputados:deputadosFiltradosState}
             renderItem = {
             deputado =>  {
-            return <View key = {deputado.item.id} style={styles.deputados}> 
+            return <View key = {deputado.item.id} style={styles.deputados}>
                 <Text style={styles.deputadoNome}> {deputado.item.nome} </Text>
                 <Image style={styles.deputadoImage} source={{uri:deputado.item.urlFoto}}/>
                 <View style={styles.siglaPartido}>
@@ -56,7 +56,7 @@ export default function Deputados({navigation}){
                 </View>
                 <Text> {deputado.item.email} </Text>
                 <View style={styles.butaoVerMais}>
-                <Button title="Ver mais informções" style={styles.deputadoButao} 
+                <Button title="Ver mais informções" style={styles.deputadoButao}
                 onPress={(e) => navigation.navigate('deputado',{id:deputado.item.id,foto:deputado.item.urlFoto,email:deputado.item.email})}/>
                 </View>
             </View>
@@ -66,7 +66,7 @@ export default function Deputados({navigation}){
     )
 }
 
-    
+
 const styles = StyleSheet.create({
     container: {
       flex: 1,
@@ -137,4 +137,4 @@ const styles = StyleSheet.create({
       shadowColor: '#52006A',
     },
   });
-  
+

@@ -1,7 +1,6 @@
 import {useEffect,useState} from 'react';
 import {StyleSheet, Text, View, FlatList, Button, Linking, Alert, ActivityIndicator, TextInput} from 'react-native';
 import Hyperlink from 'react-native-hyperlink';
-import DateTimePicker  from '@react-native-community/datetimepicker';
 
 export default function Discursos({route,navigation}){
 
@@ -35,7 +34,6 @@ export default function Discursos({route,navigation}){
         let regex = /^\d\d\d\d-\d\d-\d\d$/i;
 
         if(regex.test(inicial) && regex.test(fim)){
-            //discursoFetch()
             navigation.navigate('discursos por data',{
                 idDepu:route.params.idDepu,
                 dataInicial,
@@ -165,12 +163,10 @@ const styles = StyleSheet.create({
     },
     viewInicial:{
         alignItems:'center',
-        margin:5,
-        marginTop:'15%'
+        marginTop:'10%'
     },
     deputadoNome:{
         fontSize:20,
-        marginBottom:'5%'
     },
     subtitulo:{
         fontSize:20,

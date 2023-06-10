@@ -7,26 +7,26 @@ export default function Despesas({route,navigation}){
 
     const [gastosDeputado,setGastosDeputado] = useState([]);
     const [loading,setLoading] = useState(true);
+    const [totalGasto,setTotalGasto] =  useState(0);
 
     useEffect( ()=>{
 
         const myFetch = async () =>{
-        
+
             await fetch('https://dadosabertos.camara.leg.br/api/v2/deputados/'+route.params.idDepu+'/despesas')
             .then(res=>res.json())
             .then((res) =>{
                 console.log('fetch3')
                 if(res){
                     setGastosDeputado(res.dados);
-                    setLoading(false);            
+                    setLoading(false);
+                    setTotalGasto(res.dados.reduce((acumulador,gasto)=> acumulador+gasto.valorLiquido,0 ).toFixed(3));
                 }else{
                     console.log('dados n encontrado');
                 }
                 })
             }
-
         myFetch()
-
     },[])
 
     const handlerHyperlink = (linkDocument) =>{
@@ -52,9 +52,9 @@ export default function Despesas({route,navigation}){
             <Text style={styles.deputadoNome}>{route.params.nome}</Text>
             <Text style={styles.subtitulo}>Suas Despesas</Text>
         </View>
-
+        <Text style={styles.totalGasto} >Total gasto dos valores registrados: {totalGasto?"R$ "+totalGasto:null}</Text>
         {loading?<View style={styles.loading}><ActivityIndicator size="large" /></View>:
-        <FlatList data={gastosDeputado} 
+        <FlatList data={gastosDeputado}
         renderItem = {
             gasto =>{
                 return <View style={styles.gastosView} key = {gasto.item.codLote+gasto.item.codDocumento} >
@@ -88,20 +88,25 @@ const styles = StyleSheet.create({
         alignItems:'center',
         backgroundColor:'#145DA0'
     },
+    totalGasto:{
+        marginBottom:10
+    },
     viewDespesas:{
       backgroundColor: '#2E8BC0',
+        alignItems:'center',
+        marginBottom:'45%'
     },
     viewInicial:{
         alignItems:'center',
-        margin:15
+        marginBottom:10
     },
     deputadoNome:{
         fontSize:20,
-        marginTop:'15%'
+        marginTop:'10%'
     },
     subtitulo:{
         fontSize:20,
-        padding:10
+        padding:5
     },
     loading:{
         height:'100%'
