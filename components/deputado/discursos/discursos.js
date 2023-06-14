@@ -1,97 +1,13 @@
 import {useEffect,useState} from 'react';
 import {StyleSheet, Text, View, FlatList, Button, Linking, Alert, ActivityIndicator, TextInput} from 'react-native';
-import Hyperlink from 'react-native-hyperlink';
 
-export default function Discursos({route,navigation}){
+export default function Discursos(props){
 
-    const [discursos,setDiscursos] = useState([]);
-    const [loading,setLoading] = useState(true);
-    const [dataInicial,setDataInicial] = useState(new Date('1980-01-01'));
-    const [dataFim,setDataFim] = useState(new Date(Date.now()));
-    const [discursosFiltrados,setDiscursosFiltrados] = useState([]);
-    const [mostraFiltros,setMostraFiltros] = useState(false)
+    const [discursos,setDiscursos] = useState(props.discursos);
 
-    useEffect(() =>{
 
-        fetch('https://dadosabertos.camara.leg.br/api/v2/deputados/'+route.params.idDepu+'/discursos?dataInicio=2020-01-01&dataFim=2023-02-22&itens=30')
-        .then(res =>res.json())
-        .then(res=>{
-            if(res){
-                console.log('fetch4');
-                setDiscursos(res.dados);
-                setLoading(false);
-            }else{
-                console.log('dados n encontrados');
-            }   
-        })
-
-    },[])
-
-    const filtroDiscurso = (letras) => setDiscursosFiltrados(discursos.filter( discurso => discurso.transcricao.includes(letras))) 
-
-    const dateValidation = (inicial,fim) =>{
-
-        let regex = /^\d\d\d\d-\d\d-\d\d$/i;
-
-        if(regex.test(inicial) && regex.test(fim)){
-            navigation.navigate('discursos por data',{
-                idDepu:route.params.idDepu,
-                dataInicial,
-                dataFim
-            })
-
-        }else{
-            Alert.alert('Datas digitadas estão inválidas. Use o formato yyyy-mm-dd . Ou seja, ano, mês e dia.')
-        }
-
-    }
-
-    return (
-
-        <View style={styles.viewDespesas} >
-
-            <View style={styles.viewInicial} >
-                <Text style={styles.deputadoNome}>{route.params.nome}</Text>
-                <Text style={styles.subtitulo}>Seus discursos</Text>
-            </View>
-
-            <View style={styles.filtroButao}>
-                <Button title={mostraFiltros?"Esconder filtros":"Mostrar filtros"} onPress={e=>setMostraFiltros(!mostraFiltros)} />
-            </View>
-
-            {mostraFiltros?<View>
-            <View style={styles.discursoFiltro}>
-                <TextInput style={styles.textInput}
-                placeholder='Palavras chaves' 
-                onChangeText={filtroDiscurso}/>
-                {discursosFiltrados.length!==0?<Text style={styles.discursoTexto}>Qtd discursos encontrados: {discursosFiltrados.length}</Text>:null}
-            </View>
-            
-            <View style={styles.titleDateInput}>
-                <Text >Periodo de tempo em que foi feito os discursos</Text>
-            </View>
-
-            <View style={styles.TextInputView}>
-                <TextInput style={styles.textInput} 
-                placeholder='yyyy-mm-dd'
-                onChangeText={setDataInicial}
-                />
-                <TextInput style={styles.textInput} 
-                placeholder='yyyy-mm-dd'
-                onChangeText={setDataFim}
-                />
-            </View>
-
-            <View style={styles.butaoPesquisar}>
-                <Button title='Pesquisar discursos'
-                onPress={e =>{dateValidation(dataInicial,dataFim)}}
-                />
-            </View></View>:null
-            }
-
-            {loading?<View style={styles.loading}><ActivityIndicator size="large" /></View>:
-            discursos.length===0?<View style={styles.discursoNencontrado}><Text style={styles.discursoNencontradoText}>Nenhum discurso foi encontrado</Text></View>:
-            <FlatList data={discursosFiltrados.length===0?discursos:discursosFiltrados}
+    return <View style={styles.discursos} >
+            <FlatList data={discursos}
             renderItem = {
                 discurso => {
                     return <View style = {styles.cadaDiscurso}>
@@ -105,17 +21,18 @@ export default function Discursos({route,navigation}){
                         <Text><Text style={styles.identificacaoTexto} >Url do Vídeo: </Text> {discurso.item.urlVideo?discurso.item.urlVideo:'Não informado'}</Text>
 
                     </View>
-                }
-            }
-            />}
-        </View>
-    )
+                }}
+                />
+            </View>
 }
 
 const styles = StyleSheet.create({
+    discursos:{
+        height:"100%",
+    },
     cadaDiscurso:{
         marginVertical:15,
-        marginHorizontal:10,
+        marginHorizontal:5,
         paddingVertical:20,
         paddingHorizontal:5,
         flexDirection:'column',
@@ -124,68 +41,10 @@ const styles = StyleSheet.create({
         backgroundColor:'#145DA0',
         textAlign:'center'
     },
-    filtroButao:{
-        marginHorizontal:60,
-        marginVertical:10
-    },
-    discursoFiltro:{
-        flexDirection:'column',
-    },
-    textInput:{
-        textAlign:'center',
-        borderWidth:1,
-        padding:3,
-        marginVertical:8,
-        marginHorizontal:25,
-        borderColor:'#145DA0',
-        borderRadius:5,
-        fontSize:15
-    },
-    titleDateInput:{
-        alignItems:'center',
-    },
-    TextInputView:{
-        flexDirection:'row',
-        alignItems:'center',
-        justifyContent:'space-around'
-    },discursoTexto:{
+    discursoTexto:{
         textAlign:'center',
     },
     identificacaoTexto:{
         fontSize:20
     },
-    inicialFim:{
-        flexDirection:'row',
-        justifyContent:'space-around',
-    },
-    viewDespesas:{
-      backgroundColor: '#2E8BC0',
-    },
-    viewInicial:{
-        alignItems:'center',
-        marginTop:'10%'
-    },
-    deputadoNome:{
-        fontSize:20,
-    },
-    subtitulo:{
-        fontSize:20,
-        padding:5
-    },
-    loading:{
-        height:'100%'
-    },
-    butaoPesquisar:{
-        marginHorizontal:40,
-        marginVertical:10
-    },
-    discursoNencontrado:{
-        alignItems:'center',
-        backgroundColor: '#2E8BC0',
-        height:'100%',
-        marginTop:'50%',
-    },
-    discursoNencontradoText:{
-        fontSize:20,
-    }
 })

@@ -1,15 +1,28 @@
 import {useEffect,useState} from 'react';
 import {StyleSheet, Text, View, FlatList, Button, Linking, Alert, ActivityIndicator, TextInput} from 'react-native';
 import Hyperlink from 'react-native-hyperlink';
+import Discursos from './discursos';
+
+// pagination icons, and filter by words.
 
 export default function DiscursosLimitado({route,navigation}){
 
-    const [discursos,setDiscursos] = useState([]);
+    const [deputadosDiscursos,setDiscursos] = useState([]);
     const [loading,setLoading] = useState(true);
+    const [paginacao,setPaginacao] = useState(1); 
+
+    const paginacaoMudanca = (mudanca) =>{
+        
+        if((paginacao + mudanca) >=1) {
+            setPaginacao(paginacao + mudanca)
+        }
+        
+    }
 
     useEffect(() =>{
-
-        fetch('https://dadosabertos.camara.leg.br/api/v2/deputados/'+route.params.idDepu+'/discursos?dataInicio='+route.params.dataInicial+'&dataFim='+route.params.dataFim+'&itens=5')
+        
+        setLoading(true)
+        fetch('https://dadosabertos.camara.leg.br/api/v2/deputados/'+route.params.idDepu+'/discursos?dataInicio='+route.params.dataInicial+'&dataFim='+route.params.dataFim+'&itens=5&pagina='+paginacao)
         .then(res =>res.json())
         .then(res=>{
             if(res){
@@ -21,29 +34,23 @@ export default function DiscursosLimitado({route,navigation}){
             }   
         })
 
-    },[])
+    },[paginacao])
 
     return (
         <View style={styles.viewDiscurso} >
+            <View style={styles.buttonsView}>
+                <Button title="Página anterior" onPress={e => paginacaoMudanca(-1)} style={styles.buttons}/>
+                <Button title="Próxima página" onPress={e => paginacaoMudanca(1)} />
+            </View>
+            <View style={styles.currentPage}>
+                <Text>Página: <Text style={styles.currentPageNumber}> {paginacao} </Text> </Text>
+            </View>
         {loading?<View style={styles.loading}><ActivityIndicator size="large" /></View>:
-            <FlatList data={discursos}
+            <View style={styles.discursos} >
+                <Discursos discursos={deputadosDiscursos} />
+            </View>}
             
-            renderItem = {
-                discurso => {
-                    return <View style = {styles.cadaDiscurso}>
-
-                        <Text><Text style={styles.identificacaoTexto} >Sumário: </Text> {discurso.item.sumario}</Text>
-                        <Text><Text style={styles.identificacaoTexto} >Tipo: </Text> {discurso.item.tipoDiscurso}</Text>
-                        <Text><Text style={styles.identificacaoTexto} >Palavras chaves: </Text> {discurso.item.keywords}</Text>
-                        <Text><Text style={styles.identificacaoTexto} >Transcrição: </Text> {discurso.item.transcricao}</Text>
-                        <Text><Text style={styles.identificacaoTexto} >Data e hora de início: </Text> {discurso.item.dataHoraInicio}</Text>
-                        <Text><Text style={styles.identificacaoTexto} >Url do audio: </Text> {discurso.item.urlAudio?discurso.item.urlAudio:'Não informado'}</Text>
-                        <Text><Text style={styles.identificacaoTexto} >Url do Vídeo: </Text> {discurso.item.urlVideo?discurso.item.urlVideo:'Não informado'}</Text>
-
-                    </View>
-                }
-            }
-            />}
+            
         </View>
     )
 
@@ -53,16 +60,27 @@ const styles = StyleSheet.create({
     viewDiscurso:{
         backgroundColor: '#2E8BC0'
     },
+    currentPage:{
+        marginVertical:10,
+        alignItems:'center',
+    },
+    currentPageNumber:{
+        fontSize:20
+    },
+    discursos:{
+        height:"100%",
+
+    },
     cadaDiscurso:{
-    marginVertical:15,
-    marginHorizontal:10,
-    paddingVertical:20,
-    paddingHorizontal:5,
-    flexDirection:'column',
-    justifyContent:'center',
-    alignItems:'center',
-    backgroundColor:'#145DA0',
-    textAlign:'center'
+        marginVertical:15,
+        marginHorizontal:5,
+        paddingVertical:20,
+        paddingHorizontal:5,
+        flexDirection:'column',
+        justifyContent:'center',
+        alignItems:'center',
+        backgroundColor:'#145DA0',
+        textAlign:'center'
     },
     discursoTexto:{
         textAlign:'center',
@@ -72,5 +90,12 @@ const styles = StyleSheet.create({
     },
     loading:{
         height:'100%'
+    },
+    buttonsView:{
+        flexDirection:'row',
+        justifyContent:'space-around',
+    },
+    buttons:{
+        padding:10
     }
 })

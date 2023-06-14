@@ -10,7 +10,7 @@ export default function DeputadoSelecionado({route,navigation}){
     const [deputadoDados,setDeputadoDados] = useState({});
     const [mostrarDespesas,setMostrarDespesas] = useState(false);
     const [loading,setLoading] = useState(true);
-
+    https://dadosabertos.camara.leg.br/swagger/api.html
     useEffect(() => {
         fetch('https://dadosabertos.camara.leg.br/api/v2/deputados/'+route.params.id)
         .then(res => res.json())
@@ -48,7 +48,7 @@ export default function DeputadoSelecionado({route,navigation}){
                 <View style={styles.butao}>
                     <Button  title="Ver despesas"  
                     onPress={e =>
-                    navigation.navigate('gastos',{
+                    navigation.navigate('gastos filtros data',{
                         idDepu:route.params.id,
                         nome:deputadoDados.nomeCivil}
                         )
@@ -57,7 +57,7 @@ export default function DeputadoSelecionado({route,navigation}){
                 <View style={styles.butao}>
                 <Button  title="Ver discursos"  
                 onPress={e =>
-                navigation.navigate('discursos',{
+                navigation.navigate('discursos filtros data',{
                     idDepu:route.params.id,
                     nome:deputadoDados.nomeCivil}
                     )

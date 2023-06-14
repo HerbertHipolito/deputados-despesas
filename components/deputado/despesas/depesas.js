@@ -13,7 +13,7 @@ export default function Despesas({route,navigation}){
 
         const myFetch = async () =>{
 
-            await fetch('https://dadosabertos.camara.leg.br/api/v2/deputados/'+route.params.idDepu+'/despesas')
+            await fetch('https://dadosabertos.camara.leg.br/api/v2/deputados/'+route.params.idDepu+'/despesas?mes='+route.params.mes+'&ano='+route.params.ano)
             .then(res=>res.json())
             .then((res) =>{
                 console.log('fetch3')
@@ -28,6 +28,10 @@ export default function Despesas({route,navigation}){
             }
         myFetch()
     },[])
+
+    const converterData = (data) => {
+        return `${data[8] + data[9]}/${data[5] + data[6]}/${data[0] + data[1] + data[2] + data[3]}`
+    }
 
     const handlerHyperlink = (linkDocument) =>{
 
@@ -50,7 +54,6 @@ export default function Despesas({route,navigation}){
     <View style={styles.viewDespesas}>
         <View style={styles.viewInicial} >
             <Text style={styles.deputadoNome}>{route.params.nome}</Text>
-            <Text style={styles.subtitulo}>Suas Despesas</Text>
         </View>
         <Text style={styles.totalGasto} >Total gasto dos valores registrados: {totalGasto?"R$ "+totalGasto:null}</Text>
         {loading?<View style={styles.loading}><ActivityIndicator size="large" /></View>:
@@ -64,7 +67,7 @@ export default function Despesas({route,navigation}){
                     <Text> <Text>Valor Líquido: </Text> R$ {gasto.item.valorLiquido}</Text>
                     <Text> <Text>Cod. Documento: </Text> {gasto.item.codDocumento}</Text>
                     <Text> <Text>Cod. Lote: </Text> {gasto.item.codLote}</Text>
-                    <Text> <Text>Data Documento: </Text> {gasto.item.dataDocumento}</Text>
+                    <Text> <Text>Data Documento: </Text> {converterData(gasto.item.dataDocumento)}</Text>
                     <Text> <Text>Parcela: </Text> {gasto.item.parcela}</Text>
                     <Text> <Hyperlink onPress={(e) =>handlerHyperlink(gasto.item.urlDocumento)}>
                         <Text>{gasto.item.urlDocumento?gasto.item.urlDocumento:'Nota não encontrada'}</Text>
@@ -94,15 +97,16 @@ const styles = StyleSheet.create({
     viewDespesas:{
       backgroundColor: '#2E8BC0',
         alignItems:'center',
-        marginBottom:'45%'
+        marginBottom:'45%',
+        height:'100%',
     },
     viewInicial:{
         alignItems:'center',
         marginBottom:10
     },
     deputadoNome:{
-        fontSize:20,
-        marginTop:'10%'
+        fontSize:18,
+        marginTop:"15%"
     },
     subtitulo:{
         fontSize:20,

@@ -1,38 +1,28 @@
 import {useState} from 'react';
 import {StyleSheet, Text, View, Button, TextInput, Alert } from 'react-native';
 
-const convertDateFormat = (date) => {
-    
-    const dateParts = date.split('/');
-    const day = parseInt(dateParts[0], 10);
-    const month = parseInt(dateParts[1], 10);
-    const year = parseInt(dateParts[2], 10);
-    return `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`
+export default function DespesasDataPergunta({route,navigation}){
 
-}
 
-export default function DiscursosDataPergunta({route,navigation}){
+    const [mes,setMes] = useState('');
+    const [ano,setAno] = useState('');
+    const [palavraChave,setPalavraChave] = useState('');
 
-    const [dataInicial,setDataInicial] = useState('')
-    const [dataFim,setDataFim] = useState('')
-    const [palavraChave,setPalavraChave] = useState('')
+    const dateValidation = (mes,ano) =>{
 
-    const dateValidation = (inicial,fim) =>{
+        const mesCondicao = mes > 0 && mes <=12;
+        const anoCondicao = ano > 1970 && ano <=2030;
 
-        const dateRegex = /^(0[1-9]|[1-2][0-9]|3[0-1])\/(0[1-9]|1[0-2])\/\d{4}$/;
-
-        if(!(dateRegex.test(inicial) && dateRegex.test(fim))) {
-            Alert.alert('Datas digitadas estão inválidas. Use o formato dd/mm/yyyy. Ou seja, ano, mês e dia.')
+        if(!(mesCondicao && anoCondicao )) {
+            Alert.alert('Datas digitadas estão inválidas.')
             return;
         }
 
-        const initialDateConverted = convertDateFormat(inicial)
-        const endDateConverted = convertDateFormat(fim)
-
-        navigation.navigate('discursos por data',{
+        navigation.navigate('gastos',{
             idDepu:route.params.idDepu,
-            dataInicial:initialDateConverted,
-            dataFim:endDateConverted
+            nome:route.params.nome,
+            mes,
+            ano,
         })
 
     }
@@ -49,24 +39,25 @@ export default function DiscursosDataPergunta({route,navigation}){
                 placeholder='Palavras chaves' 
                 onChangeText={setPalavraChave}/>
             </View>
+            
             <View style={styles.titleDateInput}>
-                <Text >Periodo de tempo em que foi feito os discursos</Text>
+                <Text >Em que mes e ano foi feita a despesa</Text>
             </View>
 
             <View style={styles.TextInputView}>
                 <TextInput style={styles.textInput} 
-                placeholder='dd/mm/yyyy'
-                onChangeText={setDataInicial}
+                placeholder='mm'
+                onChangeText={setMes}
                 />
                 <TextInput style={styles.textInput} 
-                placeholder='dd/mm/yyyy'
-                onChangeText={setDataFim}
+                placeholder='yyyy'
+                onChangeText={setAno}
                 />
             </View>
 
             <View style={styles.butaoPesquisar}>
-                <Button title='Pesquisar discursos'
-                onPress={e =>{dateValidation(dataInicial,dataFim)}}
+                <Button title='Pesquisar Despesas'
+                onPress={e =>{dateValidation(mes,ano)}}
                 />
             </View>
         </View>)
@@ -81,6 +72,7 @@ const styles = StyleSheet.create({
         height:"100%",
         backgroundColor: '#2E8BC0',
         paddingVertical:"20%"
+    },textInputData:{
     },
     textInput:{
         textAlign:'center',
@@ -89,7 +81,7 @@ const styles = StyleSheet.create({
         marginVertical:25,
         marginHorizontal:25,
         borderColor:'#145DA0',
-        fontSize:20
+        fontSize:15
     },
     deputadoNomeView:{
         alignItems:'center',
@@ -104,11 +96,9 @@ const styles = StyleSheet.create({
         flexDirection:'row',
         alignItems:'center',
         justifyContent:'space-around'
-    },
-    discursoTexto:{
+    },discursoTexto:{
         textAlign:'center',
-    },
-    butaoPesquisar:{
+    },butaoPesquisar:{
         marginHorizontal:40,
         marginVertical:10,
     },
