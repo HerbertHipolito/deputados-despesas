@@ -1,5 +1,5 @@
 import {useState, useEffect} from 'react';
-import {StyleSheet, Text, View, FlatList, Button, Linking, Alert, ActivityIndicator} from 'react-native';
+import {StyleSheet, Text, View, FlatList, Button, Linking, Alert, ActivityIndicator, TouchableOpacity} from 'react-native';
 import Hyperlink from 'react-native-hyperlink';
 
 
@@ -20,7 +20,7 @@ export default function Despesas({route,navigation}){
                 if(res){
                     setGastosDeputado(res.dados);
                     setLoading(false);
-                    setTotalGasto(res.dados.reduce((acumulador,gasto)=> acumulador+gasto.valorLiquido,0 ).toFixed(3));
+                    setTotalGasto(res.dados.reduce((acumulador,gasto)=> acumulador+gasto.valorLiquido,0 ).toFixed(2));
                 }else{
                     console.log('dados n encontrado');
                 }
@@ -30,18 +30,16 @@ export default function Despesas({route,navigation}){
     },[])
 
     const converterData = (data) => {
-        return `${data[8] + data[9]}/${data[5] + data[6]}/${data[0] + data[1] + data[2] + data[3]}`
+        return data?`${data[8] + data[9]}/${data[5] + data[6]}/${data[0] + data[1] + data[2] + data[3]}`:null;
     }
 
     const handlerHyperlink = (linkDocument) =>{
 
         Alert.alert(
             'Confirmação',
-            `Você deseja abrir o Seguinte link? ${linkDocument}`,
+            `Você deseja abrir o seguinte link? ${linkDocument}`,
             [
-                {
-                    text:'Cancelar'
-                },
+                {text:'Cancelar'},
                 {
                     text:'Continuar',
                     onPress:() => Linking.openURL(linkDocument)
@@ -56,23 +54,27 @@ export default function Despesas({route,navigation}){
             <Text style={styles.deputadoNome}>{route.params.nome}</Text>
         </View>
         <Text style={styles.totalGasto} >Total gasto dos valores registrados: {totalGasto?"R$ "+totalGasto:null}</Text>
-        {loading?<View style={styles.loading}><ActivityIndicator size="large" /></View>:
+        <View  style={styles.despesasData}>
+            <Text>{`${route.params.mes}/${route.params.ano}`}</Text>
+        </View>
+        {loading?<View style={styles.loading}><ActivityIndicator busy="true" sytle={styles.ActivityIndicatorComponente} size="large" /></View>:
         <FlatList data={gastosDeputado}
         renderItem = {
             gasto =>{
                 return <View style={styles.gastosView} key = {gasto.item.codLote+gasto.item.codDocumento} >
                     <Text> <Text>Tipo da Despesa: </Text> {gasto.item.tipoDespesa}</Text>
                     <Text> <Text>Nome do Fornecedor: </Text> {gasto.item.nomeFornecedor}</Text>
-                    <Text> <Text>CNPJ do Fornecedor: </Text> {gasto.item.cnpjCpfFornecedor}</Text>
-                    <Text> <Text>Valor Líquido: </Text> R$ {gasto.item.valorLiquido}</Text>
-                    <Text> <Text>Cod. Documento: </Text> {gasto.item.codDocumento}</Text>
-                    <Text> <Text>Cod. Lote: </Text> {gasto.item.codLote}</Text>
-                    <Text> <Text>Data Documento: </Text> {converterData(gasto.item.dataDocumento)}</Text>
-                    <Text> <Text>Parcela: </Text> {gasto.item.parcela}</Text>
-                    <Text> <Hyperlink onPress={(e) =>handlerHyperlink(gasto.item.urlDocumento)}>
-                        <Text>{gasto.item.urlDocumento?gasto.item.urlDocumento:'Nota não encontrada'}</Text>
-                        </Hyperlink>
-                    </Text>
+                    <View style={styles.informacaoMeio}>
+                        <Text> <Text>CNPJ do Fornecedor: </Text> {gasto.item.cnpjCpfFornecedor}</Text>
+                        <Text> <Text>Valor Líquido: </Text> R$ {gasto.item.valorLiquido}</Text>
+                        <Text> <Text>Cod. Documento: </Text> {gasto.item.codDocumento}</Text>
+                        <Text> <Text>Cod. Lote: </Text> {gasto.item.codLote}</Text>
+                        <Text> <Text>Data Documento: </Text> {converterData(gasto.item.dataDocumento)}</Text>
+                    </View>
+                    <TouchableOpacity onPress={(e) =>handlerHyperlink(gasto.item.urlDocumento)}>
+                        <Text style={styles.notaFiscalButao} >{gasto.item.urlDocumento?"Nota Fiscal link":'Nota não encontrada'}</Text>
+                    </TouchableOpacity>
+                    
                 </View>
             }
         }/>
@@ -83,16 +85,26 @@ export default function Despesas({route,navigation}){
 
 const styles = StyleSheet.create({
     gastosView:{
-        marginVertical:10,
-        marginHorizontal:4,
+        marginVertical:8,
+        marginHorizontal:8,
         paddingVertical:20,
+        paddingHorizontal:10,
         flexDirection:'column',
         justifyContent:'center',
         alignItems:'center',
-        backgroundColor:'#145DA0'
+        backgroundColor:'#145DA0',
+        textAlign:'center',
     },
     totalGasto:{
         marginBottom:10
+    },
+    ActivityIndicatorComponente:{
+        padding:40
+    },
+    notaFiscalButao:{
+        fontSize:15,
+        borderBottomWidth:1,
+        borderBottomColor:'white'
     },
     viewDespesas:{
       backgroundColor: '#2E8BC0',
@@ -100,19 +112,28 @@ const styles = StyleSheet.create({
         marginBottom:'45%',
         height:'100%',
     },
+    despesasData:{
+        marginBottom:8
+    },
+    informacaoMeio:{
+        marginVertical:15,
+        alignItems:'center'
+    },
     viewInicial:{
         alignItems:'center',
         marginBottom:10
     },
     deputadoNome:{
         fontSize:18,
-        marginTop:"15%"
+        marginTop:"10%"
     },
     subtitulo:{
         fontSize:20,
         padding:5
     },
     loading:{
-        height:'100%'
+        height:'100%',
+        justifyContent:'center',
+        flexDirection:'column',
     }
 })

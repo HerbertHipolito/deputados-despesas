@@ -5,6 +5,9 @@ export default function Discursos(props){
 
     const [discursos,setDiscursos] = useState(props.discursos);
 
+    const converterData = (data) => {
+        return `${data[8] + data[9]}/${data[5] + data[6]}/${data[0] + data[1] + data[2] + data[3]}`
+    }
 
     return <View style={styles.discursos} >
             <FlatList data={discursos}
@@ -16,7 +19,7 @@ export default function Discursos(props){
                         <Text><Text style={styles.identificacaoTexto} >Tipo: </Text> {discurso.item.tipoDiscurso}</Text>
                         <Text><Text style={styles.identificacaoTexto} >Palavras chaves: </Text> {discurso.item.keywords}</Text>
                         <Text><Text style={styles.identificacaoTexto} >Transcrição: </Text> {discurso.item.transcricao}</Text>
-                        <Text><Text style={styles.identificacaoTexto} >Data e hora de início: </Text> {discurso.item.dataHoraInicio}</Text>
+                        <Text><Text style={styles.identificacaoTexto} >Data e hora de início: </Text> {converterData(discurso.item.dataHoraInicio)}</Text>
                         <Text><Text style={styles.identificacaoTexto} >Url do audio: </Text> {discurso.item.urlAudio?discurso.item.urlAudio:'Não informado'}</Text>
                         <Text><Text style={styles.identificacaoTexto} >Url do Vídeo: </Text> {discurso.item.urlVideo?discurso.item.urlVideo:'Não informado'}</Text>
 
@@ -29,9 +32,10 @@ export default function Discursos(props){
 const styles = StyleSheet.create({
     discursos:{
         height:"100%",
+        paddingBottom:"50%"
     },
     cadaDiscurso:{
-        marginVertical:15,
+        marginBottom:15,
         marginHorizontal:5,
         paddingVertical:20,
         paddingHorizontal:5,

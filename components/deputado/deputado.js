@@ -10,7 +10,8 @@ export default function DeputadoSelecionado({route,navigation}){
     const [deputadoDados,setDeputadoDados] = useState({});
     const [mostrarDespesas,setMostrarDespesas] = useState(false);
     const [loading,setLoading] = useState(true);
-    https://dadosabertos.camara.leg.br/swagger/api.html
+
+
     useEffect(() => {
         fetch('https://dadosabertos.camara.leg.br/api/v2/deputados/'+route.params.id)
         .then(res => res.json())
@@ -22,13 +23,17 @@ export default function DeputadoSelecionado({route,navigation}){
 
     },[])
 
+    const converterData = (data) => {
+        return data?`${data[8] + data[9]}/${data[5] + data[6]}/${data[0] + data[1] + data[2] + data[3]}`:null;
+    }
+
     return (
         loading?<View style={styles.loading}><ActivityIndicator size="large" /><Text>Carregando dados dos deputados</Text></View>:
         <View style={styles.deputadoView}>
             <Text style={styles.deputadoNome}>{deputadoDados.nomeCivil}</Text>
             <Text><Text style={styles.campo}>Nome eleitoral:</Text> {deputadoDados.ultimoStatus?.nomeEleitoral}</Text>
             <Image style={styles.deputadoImage} source={{uri:route.params.foto}}/>
-            <Text> <Text style={styles.campo}> Nascimento:</Text> {deputadoDados.dataNascimento}</Text>
+            <Text> <Text style={styles.campo}> Nascimento:</Text> {converterData(deputadoDados.dataNascimento)}</Text>
             <Text> <Text style={styles.campo}> Escolaridade:</Text> {deputadoDados.escolaridade?deputadoDados.escolaridade:'Não fornecido'}</Text>
             <Text> <Text style={styles.campo}> Email:</Text> {route.params.email}</Text>
 
@@ -80,7 +85,7 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         alignItems: 'center',
         backgroundColor: '#2E8BC0',
-        paddingVertical:40,
+        paddingVertical:20,
         height:"100%"
     },
     deputadoDadosView:{

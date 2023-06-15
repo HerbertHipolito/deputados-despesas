@@ -101,8 +101,9 @@ const styles = StyleSheet.create({
     },
     deputados:{
       width:'100%',
-      marginVertical:10,
-      paddingVertical:10,
+      marginVertical:15,
+      paddingVertical:20,
+      paddingHorizontal:20,
       alignItems:'center',
       borderColor:'white',
       backgroundColor:'#145DA0',
@@ -122,8 +123,8 @@ const styles = StyleSheet.create({
       fontSize:35,
     },
     deputadoImage:{
-      width:130,
-      height:130,
+      width:160,
+      height:150,
       resizeMode: 'contain',
       marginVertical:15,
       borderRadius:20
