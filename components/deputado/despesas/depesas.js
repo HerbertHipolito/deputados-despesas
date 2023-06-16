@@ -16,7 +16,6 @@ export default function Despesas({route,navigation}){
             await fetch('https://dadosabertos.camara.leg.br/api/v2/deputados/'+route.params.idDepu+'/despesas?mes='+route.params.mes+'&ano='+route.params.ano)
             .then(res=>res.json())
             .then((res) =>{
-                console.log('fetch3')
                 if(res){
                     setGastosDeputado(res.dados);
                     setLoading(false);

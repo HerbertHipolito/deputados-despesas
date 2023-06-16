@@ -22,7 +22,7 @@ export default function App() {
           <Stack.Screen name="gastos" component = {gastosDeputados} options={{headerShown:false}}/>
           <Stack.Screen name="gastos filtros data" component = {DespesasDataPergunta} options={{headerShown:false}}/>
           <Stack.Screen name="discursos filtros data" component = {DiscursosDataPergunta} options={{headerShown:false}} />
-          <Stack.Screen name="discursos por data" component = {DiscursosLimitado} options={{ title: 'Discursos Encontrados' }}  />
+          <Stack.Screen name="discursos por data" component = {DiscursosLimitado} options={{ title: 'Discursos encontrados' }}  />
         </Stack.Group>
       </Stack.Navigator>
     </NavigationContainer>

@@ -12,7 +12,6 @@ export default function Deputados({navigation}){
       fetch('https://dadosabertos.camara.leg.br/api/v2/deputados')
       .then(res=>res.json())
       .then(res =>{
-        console.log('fetch1')
         setDeputados(res.dados)
       })
 

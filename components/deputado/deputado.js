@@ -2,7 +2,6 @@ import {useState, useEffect} from 'react';
 import {StyleSheet, Text, View, FlatList, Image, Button, TextInput, ActivityIndicator } from 'react-native';
 import Despesas from './despesas/depesas';
 
-//https://reactnavigation.org/docs/params/
 //https://dadosabertos.camara.leg.br/swagger/api.html
 
 export default function DeputadoSelecionado({route,navigation}){
@@ -16,7 +15,6 @@ export default function DeputadoSelecionado({route,navigation}){
         fetch('https://dadosabertos.camara.leg.br/api/v2/deputados/'+route.params.id)
         .then(res => res.json())
         .then(res=>{
-            console.log('fetch2')
             setDeputadoDados(res.dados);
             setLoading(false);
         })

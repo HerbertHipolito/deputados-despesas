@@ -3,11 +3,10 @@ import {StyleSheet, Text, View, FlatList, Button, Linking, Alert, ActivityIndica
 import Hyperlink from 'react-native-hyperlink';
 import Discursos from './discursos';
 
-// pagination icons, and filter by words.
-
 export default function DiscursosLimitado({route,navigation}){
 
     const [deputadosDiscursos,setDiscursos] = useState([]);
+    const [deputadosDiscursosFiltrados,setDiscursosFiltrados] = useState([]);
     const [loading,setLoading] = useState(true);
     const [paginacao,setPaginacao] = useState(1); 
 
@@ -19,6 +18,14 @@ export default function DiscursosLimitado({route,navigation}){
         
     }
 
+    const temDiscursosParaMostrar = () => {
+
+        const mostrarDiscursosFiltrados = route.params.palavraChave && deputadosDiscursosFiltrados.length >=1;
+        const mostrarTodosDiscursos =  !route.params.palavraChave && deputadosDiscursos.length >=1;
+        return mostrarDiscursosFiltrados || mostrarTodosDiscursos;
+
+    }
+
     useEffect(() =>{
         
         setLoading(true)
@@ -26,7 +33,7 @@ export default function DiscursosLimitado({route,navigation}){
         .then(res =>res.json())
         .then(res=>{
             if(res){
-                console.log('fetch5');
+                if(route.params.palavraChave) setDiscursosFiltrados(res.dados.filter( discurso => discurso.transcricao.includes(route.params.palavraChave) ))
                 setDiscursos(res.dados);
                 setLoading(false);
             }else{
@@ -45,10 +52,14 @@ export default function DiscursosLimitado({route,navigation}){
             <View style={styles.currentPage}>
                 <Text>Página: <Text style={styles.currentPageNumber}> {paginacao} </Text> </Text>
             </View>
-        {loading?<View style={styles.loading}><ActivityIndicator size="large" /></View>:
+            {loading?
+            <View style={styles.loading}><ActivityIndicator size="large" /></View>:
             <View style={styles.discursos} >
-                <Discursos discursos={deputadosDiscursos} />
-            </View>}
+                {temDiscursosParaMostrar()?
+                <Discursos discursos={route.params.palavraChave?deputadosDiscursosFiltrados:deputadosDiscursos} />:
+                <View style={styles.naoEncontradoView}><Text style={styles.naoEncontradoText} >Nenhum discurso encontrado</Text></View>}
+            </View>
+            }
             
             
         </View>
@@ -69,7 +80,8 @@ const styles = StyleSheet.create({
     },
     discursos:{
         height:"100%",
-
+        flexDirection:'row',
+        justifyContent:'center',    
     },
     cadaDiscurso:{
         marginVertical:15,
@@ -97,5 +109,12 @@ const styles = StyleSheet.create({
     },
     buttons:{
         padding:10
+    },
+    naoEncontradoView:{
+        textAlign:'center',
+        marginTop:40,
+    },
+    naoEncontradoText:{
+        fontSize:20        
     }
 })
